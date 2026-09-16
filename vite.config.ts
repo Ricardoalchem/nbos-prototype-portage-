@@ -13,13 +13,14 @@ export default defineConfig({
     port: Number(process.env.DEV_SERVER_PORT ?? 8080),
     host: process.env.DEV_SERVER_HOST,
     cors: true,
-    allowedHosts: process.env.DEV_SERVER_DOMAIN != null
+    allowedHosts:
+      process.env.DEV_SERVER_DOMAIN != null
         ? [process.env.DEV_SERVER_DOMAIN]
         : undefined,
   },
   build: {
     rollupOptions: {
-      input: ["./index.html"],
+      input: ["./index.html", "./acquisitionDashboard.html"],
     },
   },
 });
