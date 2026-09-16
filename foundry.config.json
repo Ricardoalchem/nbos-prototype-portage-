@@ -1,0 +1,12 @@
+{
+  "foundryUrl": "https://devbydevlin.usw-17.palantirfoundry.com",
+  "widgetSet": {
+    "rid": "ri.widgetregistry..widget-set.9dcf9769-ea1b-4335-a91e-c0642f9fe9fa",
+    "repository": "ri.stemma.main.repository.b40e72c3-e653-4471-9902-c9e63316018b",
+    "directory": "./dist",
+    "autoVersion": {
+      "type": "git-describe",
+      "tagPrefix": ""
+    }
+  }
+}
