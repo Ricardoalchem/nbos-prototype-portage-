@@ -1,6 +1,7 @@
-//import { useLocation, useNavigate } from "react-router-dom";
 import {
+  Box,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -8,37 +9,52 @@ import {
   ListItemText,
   ListSubheader,
   Toolbar,
-  Box,
-  Typography,
-  IconButton,
   Tooltip,
+  Typography,
   useTheme,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { NAV_GROUPS, NAV_ITEMS } from "./navigation";
+import {
+  NAV_GROUPS,
+  NAV_ITEMS,
+  type NavItem,
+} from "./navigation";
 
-const DRAWER_WIDTH = 260;
-const COLLAPSED_WIDTH = 68;
+export const DRAWER_WIDTH = 260;
+export const COLLAPSED_WIDTH = 68;
 
-interface SidebarProps {
+interface WidgetSidebarProps {
   open: boolean;
   onToggle: () => void;
+
+  // The page currently displayed inside the widget.
+  activeItemId?: string;
+
+  // Optional: use this later to switch locally rendered widget pages.
+  onSelect?: (item: NavItem) => void;
 }
 
-export default function Sidebar({ open, onToggle }: SidebarProps) {
+export default function Sidebar({
+  open,
+  onToggle,
+  activeItemId = "acquisition",
+  onSelect,
+}: WidgetSidebarProps) {
   const theme = useTheme();
-  //const location = useLocation();
-  //const navigate = useNavigate();
 
   const homeItem = NAV_ITEMS.find((item) => item.id === "home")!;
-  const grouped = NAV_GROUPS.map((group) => ({
+
+  const groupedItems = NAV_GROUPS.map((group) => ({
     ...group,
     items: NAV_ITEMS.filter((item) => item.group === group.id),
   }));
 
-  const isActive = (path: string) =>
-    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+  const isActive = (itemId: string) => itemId === activeItemId;
+
+  const selectItem = (item: NavItem) => {
+    onSelect?.(item);
+  };
 
   return (
     <Drawer
@@ -54,7 +70,10 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
           }),
           overflowX: "hidden",
           bgcolor: "background.paper",
-          boxShadow: theme.palette.mode === "light" ? "2px 0 8px rgba(0,0,0,0.04)" : "none",
+          boxShadow:
+            theme.palette.mode === "light"
+              ? "2px 0 8px rgba(0,0,0,0.04)"
+              : "none",
         },
       }}
     >
@@ -85,11 +104,13 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
             >
               N
             </Box>
+
             <Typography variant="subtitle1" noWrap fontWeight={700}>
               NBOS
             </Typography>
           </Box>
         )}
+
         <IconButton onClick={onToggle} size="small">
           {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
@@ -99,8 +120,11 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
         <ListItem disablePadding>
           <Tooltip title={open ? "" : homeItem.label} placement="right">
             <ListItemButton
-              selected={isActive(homeItem.path)}
-            //   onClick={() => navigate(homeItem.path)}
+              selected={isActive(homeItem.id)}
+              onClick={
+                onSelect ? () => selectItem(homeItem) : undefined
+              }
+              aria-current={isActive(homeItem.id) ? "page" : undefined}
               sx={{
                 minHeight: 44,
                 px: open ? 2.5 : 2,
@@ -112,20 +136,24 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
                   minWidth: 0,
                   mr: open ? 2 : "auto",
                   justifyContent: "center",
-                  color: isActive(homeItem.path) ? "primary.main" : "text.secondary",
+                  color: isActive(homeItem.id)
+                    ? "primary.main"
+                    : "text.secondary",
                 }}
               >
                 <homeItem.icon />
               </ListItemIcon>
+
               {open && <ListItemText primary={homeItem.label} />}
             </ListItemButton>
           </Tooltip>
         </ListItem>
       </List>
 
-      {grouped.map((group) => (
+      {groupedItems.map((group) => (
         <List
           key={group.id}
+          disablePadding
           subheader={
             open ? (
               <ListSubheader
@@ -144,14 +172,16 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
               </ListSubheader>
             ) : undefined
           }
-          disablePadding
         >
           {group.items.map((item) => (
             <ListItem key={item.id} disablePadding>
               <Tooltip title={open ? "" : item.label} placement="right">
                 <ListItemButton
-                  selected={isActive(item.path)}
-                //   onClick={() => navigate(item.path)}
+                  selected={isActive(item.id)}
+                  onClick={
+                    onSelect ? () => selectItem(item) : undefined
+                  }
+                  aria-current={isActive(item.id) ? "page" : undefined}
                   sx={{
                     minHeight: 44,
                     px: open ? 2.5 : 2,
@@ -163,11 +193,14 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
                       minWidth: 0,
                       mr: open ? 2 : "auto",
                       justifyContent: "center",
-                      color: isActive(item.path) ? "primary.main" : "text.secondary",
+                      color: isActive(item.id)
+                        ? "primary.main"
+                        : "text.secondary",
                     }}
                   >
                     <item.icon />
                   </ListItemIcon>
+
                   {open && <ListItemText primary={item.label} />}
                 </ListItemButton>
               </Tooltip>
@@ -178,5 +211,3 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
     </Drawer>
   );
 }
-
-export { DRAWER_WIDTH, COLLAPSED_WIDTH };

@@ -1,28 +1,32 @@
-import { useState } from "react";
-//import { Outlet, useLocation } from "react-router-dom";
+import { useState, type ReactNode } from "react";
 import { Box, Toolbar } from "@mui/material";
 import Sidebar, { DRAWER_WIDTH, COLLAPSED_WIDTH } from "./Sidebar";
 import TopBar from "./TopBar";
-import { NAV_ITEMS } from "./navigation";
 
-export default function DashboardLayout() {
+interface DashboardLayoutProps {
+  children: ReactNode;
+}
+
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
- // const location = useLocation();
-
-  const current = NAV_ITEMS.find((item) =>
-    item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)
-  );
-  const title = current?.label ?? "NBOS";
+  const title = "Acquisition Dashboard";
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar open={sidebarOpen} onToggle={() => setSidebarOpen((prev) => !prev)} />
+    <Box sx={{ display: "flex", minHeight: "100%" }}>
+      <Sidebar
+        open={sidebarOpen}
+        onToggle={() => setSidebarOpen((previous) => !previous)}
+        activeItemId="acquisition"
+      />
       <TopBar title={title} sidebarOpen={sidebarOpen} />
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          width: `calc(100% - ${sidebarOpen ? DRAWER_WIDTH : COLLAPSED_WIDTH}px)`,
+          width: `calc(100% - ${
+            sidebarOpen ? DRAWER_WIDTH : COLLAPSED_WIDTH
+          }px)`,
           transition: (theme) =>
             theme.transitions.create("width", {
               easing: theme.transitions.easing.sharp,
@@ -31,9 +35,7 @@ export default function DashboardLayout() {
         }}
       >
         <Toolbar />
-        <Box sx={{ p: 3 }}>
-          {/* <Outlet /> */}
-        </Box>
+        <Box sx={{ p: 3 }}>{children}</Box>
       </Box>
     </Box>
   );
