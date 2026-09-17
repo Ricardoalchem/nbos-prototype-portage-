@@ -4,9 +4,9 @@ import "./main.css";
 import { OsdkProvider } from "@osdk/react";
 import { FoundryWidget } from "@osdk/widget.client-react";
 import { createRoot } from "react-dom/client";
-import { client } from "./client.js";
-import MainConfig from "./main.config.js";
-import { Widget } from "./Widget.js";
+import { client } from "../client.js";
+import MainConfig from "../widgetConfigs/main.config.js";
+import { Widget } from "../pages/Widget.js";
 
 const root = document.getElementById("root")!;
 
@@ -15,5 +15,5 @@ createRoot(root).render(
     <OsdkProvider client={client}>
       <Widget />
     </OsdkProvider>
-  </FoundryWidget>,
+  </FoundryWidget>
 );

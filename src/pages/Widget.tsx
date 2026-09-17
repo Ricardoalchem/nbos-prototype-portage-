@@ -5,8 +5,8 @@ import {
 } from "@osdk/widget.client-react";
 import clsx from "clsx";
 import React, { useCallback, useEffect } from "react";
-import type MainConfig from "./main.config.js";
-import { useDarkTheme } from "./useDarkTheme.js";
+import type MainConfig from "../widgetConfigs/main.config.js";
+import { useDarkTheme } from "../useDarkTheme.js";
 import css from "./Widget.module.css";
 // import { useOsdkClient } from "@osdk/react";
 
@@ -27,12 +27,13 @@ export const Widget: React.FC = () => {
       emitEvent("setCounterValue", {
         parameterUpdates: { counterValue: value },
       }),
-    [emitEvent],
+    [emitEvent]
   );
 
-  const handleResetCounter = useCallback(() => setCounterValue(0), [
-    setCounterValue,
-  ]);
+  const handleResetCounter = useCallback(
+    () => setCounterValue(0),
+    [setCounterValue]
+  );
 
   useEffect(() => {
     const interval = setInterval(() => setCounterValue(counterValue + 1), 1000);

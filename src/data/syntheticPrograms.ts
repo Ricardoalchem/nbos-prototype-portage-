@@ -1,4 +1,4 @@
-import type { AcquisitionProgram } from "./acquisition";
+import type { AcquisitionProgram } from "../domain/acquisition";
 
 export const ACQUISITION_YEARS = [2022, 2023, 2024, 2025, 2026] as const;
 export const ACQUISITION_FYDP_YEARS = [2025, 2026, 2027, 2028, 2029] as const;

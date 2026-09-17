@@ -30,14 +30,14 @@ import {
   pricingDecisionTimeline,
   type AcquisitionFlag,
   type FydpRow,
-} from "./acquisition";
+} from "../domain/acquisition";
 import {
   SYNTHETIC_ACQUISITION_PROGRAMS,
   ACQUISITION_YEARS,
   ACQUISITION_FYDP_YEARS,
   SYNTHETIC_ACQUISITION_SCENARIO,
   SYNTHETIC_DECISION_DELTAS,
-} from "./syntheticPrograms";
+} from "../data/syntheticPrograms";
 
 function FlagChip({ flag }: { flag: AcquisitionFlag }) {
   const colorMap = {
