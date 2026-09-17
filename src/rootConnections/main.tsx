@@ -1,5 +1,5 @@
 import "@blueprintjs/core/lib/css/blueprint.css";
-import "./main.css";
+import "../main.css";
 
 import { OsdkProvider } from "@osdk/react";
 import { FoundryWidget } from "@osdk/widget.client-react";

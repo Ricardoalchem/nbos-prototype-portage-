@@ -7,7 +7,7 @@ import clsx from "clsx";
 import React, { useCallback, useEffect } from "react";
 import type MainConfig from "../widgetConfigs/main.config.js";
 import { useDarkTheme } from "../useDarkTheme.js";
-import css from "./Widget.module.css";
+import css from "../Widget.module.css";
 // import { useOsdkClient } from "@osdk/react";
 
 const useWidgetContext: () => FoundryWidgetClientContext<typeof MainConfig> =

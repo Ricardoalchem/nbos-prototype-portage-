@@ -1,7 +1,7 @@
 import { defineConfig } from "@osdk/widget.client";
 
 export default defineConfig({
-  id: "nbos-acquisition-dashboard",
+  id: "nbosAcquisitionDashboard",
   name: "NBOS Acquisition Dashboard",
   description: "NBOS acquisition dashboard prototype",
   type: "workshop",

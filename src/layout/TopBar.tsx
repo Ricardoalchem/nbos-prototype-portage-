@@ -8,26 +8,18 @@ import {
 } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useThemeMode } from "../theme/ThemeContext";
-import {
-  COLLAPSED_WIDTH,
-  DRAWER_WIDTH,
-} from "./Sidebar";
+import { useThemeMode } from "../theme/useThemeMode";
+import { COLLAPSED_WIDTH, DRAWER_WIDTH } from "./Sidebar";
 
 interface WidgetTopBarProps {
   title: string;
   sidebarOpen: boolean;
 }
 
-export default function TopBar({
-  title,
-  sidebarOpen,
-}: WidgetTopBarProps) {
+export default function TopBar({ title, sidebarOpen }: WidgetTopBarProps) {
   const { mode, toggleTheme } = useThemeMode();
 
-  const sidebarWidth = sidebarOpen
-    ? DRAWER_WIDTH
-    : COLLAPSED_WIDTH;
+  const sidebarWidth = sidebarOpen ? DRAWER_WIDTH : COLLAPSED_WIDTH;
 
   return (
     <AppBar
@@ -87,16 +79,10 @@ export default function TopBar({
             color="inherit"
             size="small"
             aria-label={
-              mode === "dark"
-                ? "Switch to light theme"
-                : "Switch to dark theme"
+              mode === "dark" ? "Switch to light theme" : "Switch to dark theme"
             }
           >
-            {mode === "dark" ? (
-              <Brightness7Icon />
-            ) : (
-              <Brightness4Icon />
-            )}
+            {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Box>
       </Toolbar>

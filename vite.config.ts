@@ -20,7 +20,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      input: ["./index.html", "./acquisitionDashboard.html", "./nbos.html"],
+      input: ["./index.html", "./acquisitionDashboard.html", "./src/nbos.html"],
     },
   },
 });

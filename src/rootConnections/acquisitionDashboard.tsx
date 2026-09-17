@@ -1,4 +1,4 @@
-import "./main.css";
+import "../main.css";
 
 import { FoundryWidget } from "@osdk/widget.client-react";
 import { createRoot } from "react-dom/client";
