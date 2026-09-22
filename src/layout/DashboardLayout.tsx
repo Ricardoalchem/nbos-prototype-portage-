@@ -1,7 +1,9 @@
 import { useState, type ReactNode } from "react";
 import { Box, Toolbar } from "@mui/material";
+import { matchPath, useLocation } from "react-router";
 import Sidebar, { DRAWER_WIDTH, COLLAPSED_WIDTH } from "./Sidebar";
 import TopBar from "./TopBar";
+import { NAV_ITEMS } from "./navigation";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -9,14 +11,17 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const title = "Acquisition Dashboard";
+  const location = useLocation();
+  const activeItem = NAV_ITEMS.find((item) =>
+    matchPath({ path: item.path, end: true }, location.pathname)
+  );
+  const title = activeItem?.label ?? "NBOS";
 
   return (
     <Box sx={{ display: "flex", minHeight: "100%" }}>
       <Sidebar
         open={sidebarOpen}
         onToggle={() => setSidebarOpen((previous) => !previous)}
-        activeItemId="acquisition"
       />
       <TopBar title={title} sidebarOpen={sidebarOpen} />
 

@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { matchPath, useLocation, useNavigate } from "react-router";
 import {
   NAV_GROUPS,
   NAV_ITEMS,
@@ -23,25 +24,20 @@ import {
 
 export const DRAWER_WIDTH = 260;
 export const COLLAPSED_WIDTH = 68;
+const ROUTABLE_PATHS = new Set(["/", "/acquisition", "/issues"]);
 
 interface WidgetSidebarProps {
   open: boolean;
   onToggle: () => void;
-
-  // The page currently displayed inside the widget.
-  activeItemId?: string;
-
-  // Optional: use this later to switch locally rendered widget pages.
-  onSelect?: (item: NavItem) => void;
 }
 
 export default function Sidebar({
   open,
   onToggle,
-  activeItemId = "acquisition",
-  onSelect,
 }: WidgetSidebarProps) {
   const theme = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const homeItem = NAV_ITEMS.find((item) => item.id === "home")!;
 
@@ -50,10 +46,15 @@ export default function Sidebar({
     items: NAV_ITEMS.filter((item) => item.group === group.id),
   }));
 
-  const isActive = (itemId: string) => itemId === activeItemId;
+  const isActive = (item: NavItem) =>
+    Boolean(matchPath({ path: item.path, end: true }, location.pathname));
+
+  const isRoutable = (item: NavItem) => ROUTABLE_PATHS.has(item.path);
 
   const selectItem = (item: NavItem) => {
-    onSelect?.(item);
+    if (isRoutable(item)) {
+      navigate(item.path);
+    }
   };
 
   return (
@@ -120,11 +121,10 @@ export default function Sidebar({
         <ListItem disablePadding>
           <Tooltip title={open ? "" : homeItem.label} placement="right">
             <ListItemButton
-              selected={isActive(homeItem.id)}
-              onClick={
-                onSelect ? () => selectItem(homeItem) : undefined
-              }
-              aria-current={isActive(homeItem.id) ? "page" : undefined}
+              selected={isActive(homeItem)}
+              onClick={() => selectItem(homeItem)}
+              disabled={!isRoutable(homeItem)}
+              aria-current={isActive(homeItem) ? "page" : undefined}
               sx={{
                 minHeight: 44,
                 px: open ? 2.5 : 2,
@@ -136,8 +136,10 @@ export default function Sidebar({
                   minWidth: 0,
                   mr: open ? 2 : "auto",
                   justifyContent: "center",
-                  color: isActive(homeItem.id)
+                  color: isActive(homeItem)
                     ? "primary.main"
+                    : !isRoutable(homeItem)
+                    ? "text.disabled"
                     : "text.secondary",
                 }}
               >
@@ -177,11 +179,10 @@ export default function Sidebar({
             <ListItem key={item.id} disablePadding>
               <Tooltip title={open ? "" : item.label} placement="right">
                 <ListItemButton
-                  selected={isActive(item.id)}
-                  onClick={
-                    onSelect ? () => selectItem(item) : undefined
-                  }
-                  aria-current={isActive(item.id) ? "page" : undefined}
+                  selected={isActive(item)}
+                  onClick={() => selectItem(item)}
+                  disabled={!isRoutable(item)}
+                  aria-current={isActive(item) ? "page" : undefined}
                   sx={{
                     minHeight: 44,
                     px: open ? 2.5 : 2,
@@ -193,8 +194,10 @@ export default function Sidebar({
                       minWidth: 0,
                       mr: open ? 2 : "auto",
                       justifyContent: "center",
-                      color: isActive(item.id)
+                      color: isActive(item)
                         ? "primary.main"
+                        : !isRoutable(item)
+                        ? "text.disabled"
                         : "text.secondary",
                     }}
                   >
